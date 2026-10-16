@@ -18,6 +18,7 @@ from app.schemas import (
     UserLogin,
     InternshipCreate,
     InternshipResponse,
+    InternshipUpdate,
 )
 
 
@@ -92,7 +93,8 @@ def get_current_user(
 
 
 # Create database tables
-Base.metadata.create_all(bind=engine)
+if os.getenv("APP_ENV") != "test":
+    Base.metadata.create_all(bind=engine)
 
 
 # Home endpoint

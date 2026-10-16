@@ -1,58 +1,66 @@
-# kaizenO-O
-
 # Secure Internship Tracker API
 
-A RESTful backend API for tracking internship applications, built with FastAPI and MySQL. It supports user registration, JWT authentication, and private internship management.
+A secure RESTful backend API for tracking internship applications, built with **FastAPI, Python, SQLAlchemy, and MySQL**. The project features JWT authentication, password hashing, input validation, and user-specific access controls.
 
 ## Features
 
 - User registration and login
-- Secure password hashing using Argon2
-- JWT-based authentication
-- Create, read, update, and delete internship applications
-- User-specific data access
-- Input validation using Pydantic
-- MySQL database integration using SQLAlchemy
+- Password hashing and verification using `pwdlib`
+- JWT-based authentication with 30-minute access tokens
+- Create, read, update, and delete internship applications (CRUD)
+- User-specific internship data access
+- Request validation using Pydantic
+- MySQL database integration using SQLAlchemy and PyMySQL
 - Interactive API documentation with Swagger UI
+- Automated API tests using pytest
+- SQLite in-memory database for isolated tests
 
 ## Tech Stack
 
-- **Language:** Python
-- **API Framework:** FastAPI
-- **Database:** MySQL
-- **ORM:** SQLAlchemy
-- **Authentication:** JWT (PyJWT)
-- **Password Hashing:** Argon2
-- **Validation:** Pydantic
-- **Database Driver:** PyMySQL
+| Technology | Purpose                   |
+| ---------- | ------------------------- |
+| Python     | Backend programming       |
+| FastAPI    | REST API framework        |
+| MySQL      | Main application database |
+| SQLAlchemy | Database ORM              |
+| PyMySQL    | MySQL database driver     |
+| PyJWT      | JWT authentication        |
+| pwdlib     | Password hashing          |
+| Pydantic   | Data validation           |
+| pytest     | Automated testing         |
+| SQLite     | Test database             |
 
 ## API Endpoints
 
-| Method | Endpoint | Description | Authentication |
-|---|---|---|---|
-| POST | `/register` | Register a user | No |
-| POST | `/login` | Log in and receive an access token | No |
-| GET | `/me` | Get the current user | Yes |
-| POST | `/internships` | Create an internship | Yes |
-| GET | `/internships` | List your internships | Yes |
-| GET | `/internships/{internship_id}` | Get an internship | Yes |
-| PUT | `/internships/{internship_id}` | Update an internship | Yes |
-| DELETE | `/internships/{internship_id}` | Delete an internship | Yes |
+| Method | Endpoint                       | Description                        | Authentication |
+| ------ | ------------------------------ | ---------------------------------- | -------------- |
+| GET    | `/`                            | API welcome message                | No             |
+| GET    | `/health`                      | Health check                       | No             |
+| POST   | `/register`                    | Register a new user                | No             |
+| POST   | `/login`                       | Log in and receive an access token | No             |
+| GET    | `/me`                          | Get the current user's profile     | Yes            |
+| POST   | `/internships`                 | Create an internship               | Yes            |
+| GET    | `/internships`                 | List your internships              | Yes            |
+| GET    | `/internships/{internship_id}` | Retrieve an internship             | Yes            |
+| PUT    | `/internships/{internship_id}` | Update an internship               | Yes            |
+| DELETE | `/internships/{internship_id}` | Delete an internship               | Yes            |
 
 ## Getting Started
 
+### Prerequisites
+
+- Python installed
+- MySQL Server installed and running
+- Git installed
+
 ### 1. Clone the repository
 
-```bash
+```powershell
 git clone https://github.com/kaizenO-O/secure-internship-tracker-api.git
 cd secure-internship-tracker-api
 ```
 
-Replace `kaizenO-O` with your GitHub username.
-
 ### 2. Create and activate a virtual environment
-
-On Windows PowerShell:
 
 ```powershell
 python -m venv venv
@@ -67,56 +75,105 @@ python -m pip install -r requirements.txt
 
 ### 4. Configure environment variables
 
-Create a local `.env` file in the project root using `.env.example` as a template.
+Create a `.env` file in the project root using `.env.example` as a reference.
 
-Set your own MySQL credentials and a strong, randomly generated `SECRET_KEY`. Never commit the real `.env` file.
+Configure your local values:
 
-### 5. Set up MySQL
+```dotenv
+DB_USER=your_mysql_username
+DB_PASSWORD=your_mysql_password
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=internship_tracker
+SECRET_KEY=your_generated_secret_key
+```
 
-Install and start MySQL Server. Create a database named `internship_tracker` and configure your database connection variables in `.env`.
+Replace the example values with your actual configuration. Generate a strong, random `SECRET_KEY`.
 
-### 6. Start the API
+**Never commit your real `.env` file, database password, or secret key to GitHub.**
+
+### 5. Create the database
+
+Start MySQL Server and create the application database:
+
+```sql
+CREATE DATABASE internship_tracker;
+```
+
+Ensure the MySQL credentials in `.env` match your local setup. The application currently creates its tables through SQLAlchemy when it starts outside test mode.
+
+### 6. Run the API
 
 ```powershell
 python -m uvicorn app.main:app --reload
 ```
 
-The API should be available at:
+The API should now be available at:
 
-- API root: http://127.0.0.1:8000/
-- Swagger UI: http://127.0.0.1:8000/docs
+- **API root:** [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+- **Health check:** [http://127.0.0.1:8000/health](http://127.0.0.1:8000/health)
+- **Swagger UI:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+- **ReDoc:** [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
 
 ## Authentication
 
-Register an account and log in to receive an access token. In Swagger UI, use the **Authorize** control to provide the token, then test the protected endpoints.
+The API uses JWT bearer tokens to protect private endpoints.
 
-## Security
+1. Register an account using `POST /register`.
+2. Log in using `POST /login`.
+3. Copy the returned `access_token`.
+4. Click **Authorize** in Swagger UI and enter the token as requested.
+5. Test the protected endpoints.
 
-- Passwords are stored as password hashes rather than plaintext.
+Access tokens expire after 30 minutes. Protected internship operations use the authenticated user's identity to restrict access to their own records.
+
+## Running Tests
+
+The project includes automated tests using pytest and an in-memory SQLite database.
+
+Run the tests from the project root:
+
+```powershell
+python -m pytest -v
+```
+
+The current test suite contains **13 tests** covering:
+
+- User registration and duplicate registration
+- Login and incorrect passwords
+- Authentication requirements
+- Internship creation and retrieval
+- Internship updates and deletion
+- Invalid JWT tokens
+- Prevention of cross-user access, updates, and deletion
+
+The tests use a separate database configuration to avoid modifying your MySQL application data.
+
+## Security Considerations
+
+- Passwords are stored as hashes rather than plaintext.
 - Protected routes require JWT authentication.
-- Internship records are scoped to the authenticated user.
-- Environment secrets are excluded from version control.
+- Internship records are filtered by the authenticated user's ID.
+- Input data is validated using Pydantic schemas.
+- Secrets should be stored in environment variables and excluded from version control.
+- Automated tests verify important user-access restrictions.
+
+This is a portfolio and learning project. Additional hardening is recommended before production use, including database migrations, rate limiting, secure deployment configuration, and production-grade secret management.
 
 ## Future Improvements
 
-- Automated tests with pytest
-- Pagination and search
+- Pagination and internship search
+- Filtering by application status
 - Internship deadline reminders
-- Deployment with managed database hosting
-- Continuous integration
-
-
+- Database migrations using Alembic
+- Continuous integration with GitHub Actions
+- Production deployment
+- Additional edge-case and security tests
 
 ## Author
 
-Kyash Thakur
+**Kyash Thakur**
+B.Tech Computer Science Engineering
+Specialization: Cyber Security | AI ML
 
-B.Tech Computer Science Engineering  
-Specialization: Cyber Security  
-Interests: AI/ML and Cybersecurity
-
-
-
-
-GitHub: https://github.com/kaizenO-O
-
+GitHub: [https://github.com/kaizenO-O](https://github.com/kaizenO-O)

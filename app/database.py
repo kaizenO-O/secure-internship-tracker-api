@@ -43,5 +43,3 @@ def get_db():
         db.close()
 
 
-with engine.connect() as connection:
-    print("Database connected successfully!")
