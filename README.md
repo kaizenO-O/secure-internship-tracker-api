@@ -104,11 +104,18 @@ Register an account and log in to receive an access token. In Swagger UI, use th
 - Deployment with managed database hosting
 - Continuous integration
 
+
+
 ## Author
 
-Kyash Thakur
+Yash Singh
 
-B.Tech Computer Science Engineering | Cyber Security | AI ML
+B.Tech Computer Science Engineering  
+Specialization: Cyber Security  
+Interests:AI/ML and Cybersecurity
+
+
+
 
 GitHub: https://github.com/kaizenO-O
 
