@@ -108,7 +108,7 @@ Register an account and log in to receive an access token. In Swagger UI, use th
 
 ## Author
 
-Yash Singh
+Kyash Thakur
 
 B.Tech Computer Science Engineering  
 Specialization: Cyber Security  
