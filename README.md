@@ -1,4 +1,5 @@
-## Author
+# kaizenO-O
+
 # Secure Internship Tracker API
 
 A RESTful backend API for tracking internship applications, built with FastAPI and MySQL. It supports user registration, JWT authentication, and private internship management.
