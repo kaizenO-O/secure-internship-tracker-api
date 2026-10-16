@@ -43,11 +43,11 @@ A RESTful backend API for tracking internship applications, built with FastAPI a
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/secure-internship-tracker-api.git
+git clone https://github.com/kaizenO-O/secure-internship-tracker-api.git
 cd secure-internship-tracker-api
 ```
 
-Replace `YOUR_USERNAME` with your GitHub username.
+Replace `kaizenO-O` with your GitHub username.
 
 ### 2. Create and activate a virtual environment
 
@@ -110,4 +110,5 @@ Yash Singh
 
 B.Tech Computer Science Engineering | Cyber Security
 
-GitHub: https://github.com/YOUR_USERNAME
+GitHub: https://github.com/kaizenO-O
+
