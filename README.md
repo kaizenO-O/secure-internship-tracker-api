@@ -112,7 +112,7 @@ Yash Singh
 
 B.Tech Computer Science Engineering  
 Specialization: Cyber Security  
-Interests:AI/ML and Cybersecurity
+Interests: AI/ML and Cybersecurity
 
 
 
